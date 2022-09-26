@@ -37,6 +37,10 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     res.send("try GET /filteredimage?image_url={{}}")
   } );
   
+  app.get( "/filteredimage", async ( req, res ) => {
+    var imagePath = filterImageFromURL(req.query.image_url);
+    res.sendFile(await imagePath);
+  } );
 
   // Start the Server
   app.listen( port, () => {

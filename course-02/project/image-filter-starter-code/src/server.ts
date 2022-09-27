@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {Request, Response} from 'express';
 
 (async () => {
 
@@ -33,13 +34,17 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
+  app.get( "/", async ( req: Request, res: Response) => {
     res.send("try GET /filteredimage?image_url={{}}")
   } );
   
-  app.get( "/filteredimage", async ( req, res ) => {
-    var imagePath = filterImageFromURL(req.query.image_url);
-    res.sendFile(await imagePath);
+  app.get( "/filteredimage", async ( req: Request, res: Response ) => {
+    try {
+      var imagePath = filterImageFromURL(req.query.image_url);
+      res.status(200).sendFile(await imagePath);
+    } catch (error) {
+      res.status(404).send('Sorry, cant find the image url');
+    }
   } );
 
   // Start the Server

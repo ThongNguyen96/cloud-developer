@@ -40,8 +40,8 @@ import {Request, Response} from 'express';
   
   app.get( "/filteredimage", async ( req: Request, res: Response ) => {
     try {
-      var imagePath = filterImageFromURL(req.query.image_url);
-      res.status(200).sendFile(await imagePath);
+      let image_url: string = await filterImageFromURL(req.query.image_url);
+      res.status(200).sendFile(image_url, () => {deleteLocalFiles([image_url])});
     } catch (error) {
       res.status(404).send('Sorry, cant find the image url');
     }
